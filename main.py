@@ -1,10 +1,11 @@
 from flask import Flask, render_template, redirect, url_for, request
 from flask_bootstrap import Bootstrap5
 from flask_sqlalchemy import SQLAlchemy
+from flask_wtf.file import FileRequired, FileAllowed
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy import Integer, String, Text
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, TextAreaField
+from wtforms import StringField, SubmitField, TextAreaField, FileField
 from wtforms.validators import DataRequired, URL
 from flask_ckeditor import CKEditor, CKEditorField
 from datetime import date
@@ -37,11 +38,12 @@ with app.app_context():
     db.create_all()
 
 class NewBlogForm(FlaskForm):
-    blog_title = StringField('blog_title', validators=[DataRequired()])
-    blog_subtitle = StringField('blog_subtitle', validators=[DataRequired()])
-    blog_author = StringField('blog_author', validators=[DataRequired()])
-    blog_img_url = StringField('blog_img_url', validators=[DataRequired()])
-    blog_content = TextAreaField('blog_content', validators=[DataRequired()])
+    blog_title = StringField('Blog Post Title', validators=[DataRequired()])
+    blog_subtitle = StringField('Blog Post Subtitle', validators=[DataRequired()])
+    blog_author = StringField('Post Author', validators=[DataRequired()])
+    blog_img_url = StringField('Blog Post Image URL', validators=[DataRequired()])
+    blog_image = FileField('Blog Post Image', validators=[FileRequired(), FileAllowed(['jpg'])])
+    blog_content = TextAreaField('Blog Post Content', validators=[DataRequired()])
     submit = SubmitField(label='Submit')
 
 

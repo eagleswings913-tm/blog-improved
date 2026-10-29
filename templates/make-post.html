@@ -27,6 +27,8 @@
       <div class="col-lg-8 col-md-10 mx-auto">
         <!-- TODO:-Add CKEditor and render the form here -->
           {{ render_form(form) }}
+          {{ ckeditor.load() }}
+          {{ ckeditor.config(name='blog_content') }}
       </div>
     </div>
   </div>
