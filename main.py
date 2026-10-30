@@ -42,7 +42,7 @@ class NewBlogForm(FlaskForm):
     blog_subtitle = StringField('Blog Post Subtitle', validators=[DataRequired()])
     blog_author = StringField('Post Author', validators=[DataRequired()])
     blog_img_url = StringField('Blog Post Image URL', validators=[DataRequired()])
-    blog_image = FileField('Blog Post Image', validators=[FileRequired(), FileAllowed(['jpg'])])
+    # blog_image = FileField('Blog Post Image', validators=[FileRequired(), FileAllowed(['jpg'])])
     blog_content = TextAreaField('Blog Post Content', validators=[DataRequired()])
     submit = SubmitField(label='Submit')
 
@@ -65,7 +65,18 @@ def new_post():
     if request.method == 'GET':
         return render_template("make-post.html", form=form)
     else:
-        return "Form Submitted"
+        blog_title = form.blog_title.data
+        blog_subtitle = form.blog_subtitle.data
+        blog_author = form.blog_author.data
+        blog_img_url = form.blog_img_url.data
+        blog_img_url = 'assets/img/' + blog_img_url
+        image_url = url_for('static', filename=blog_img_url)
+        blog_content = form.blog_content.data
+        today = date.today().strftime("%B %d, %Y")
+        new_blog_post = BlogPost(title=blog_title, subtitle=blog_subtitle, author=blog_author, img_url=image_url, body=blog_content, date=today)
+        db.session.add(new_blog_post)
+        db.session.commit()
+        return redirect(url_for('get_all_posts'))
 
 # TODO: edit_post() to change an existing blog post
 
