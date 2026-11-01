@@ -84,8 +84,14 @@ def new_post():
 # TODO: edit_post() to change an existing blog post
 @app.route("/edit_post/<int:post_id>",methods=['GET'])
 def edit_post(post_id):
-    edit_form = NewBlogForm()
     requested_post = db.get_or_404(BlogPost, post_id)
+    edit_form = NewBlogForm(
+        blog_title=requested_post.title,
+        blog_subtitle=requested_post.subtitle,
+        blog_author=requested_post.author,
+        blog_img_url=requested_post.img_url,
+        blog_content=requested_post.body
+    )
     if request.method == 'GET':
         return render_template("make-post.html", form=edit_form, action="edit")
     else:
