@@ -41,7 +41,7 @@ class NewBlogForm(FlaskForm):
     blog_title = StringField('Blog Post Title', validators=[DataRequired()])
     blog_subtitle = StringField('Blog Post Subtitle', validators=[DataRequired()])
     blog_author = StringField('Post Author', validators=[DataRequired()])
-    blog_img_url = StringField('Blog Post Image URL', validators=[DataRequired()])
+    blog_img_url = StringField('Blog Post Image URL')
     # blog_image = FileField('Blog Post Image', validators=[FileRequired(), FileAllowed(['jpg'])])
     blog_content = TextAreaField('Blog Post Content', validators=[DataRequired()])
     submit = SubmitField(label='Submit')
@@ -69,7 +69,10 @@ def new_post():
         blog_subtitle = form.blog_subtitle.data
         blog_author = form.blog_author.data
         blog_img_url = form.blog_img_url.data
-        blog_img_url = 'assets/img/' + blog_img_url
+        if blog_img_url:
+            blog_img_url = 'assets/img/' + blog_img_url
+        else:
+            blog_img_url = 'assets/img/default.jpg'
         image_url = url_for('static', filename=blog_img_url)
         blog_content = form.blog_content.data
         today = date.today().strftime("%B %d, %Y")
